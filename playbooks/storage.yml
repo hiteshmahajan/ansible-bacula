@@ -1,0 +1,10 @@
+---
+- hosts: bacula-storage
+  sudo: yes
+  vars:
+    dir_name: bacula-dir
+    sd_address: {{ ansible_default_ipv4.address }}
+    sd_name: {{ ansible_hostname }}
+    sd_password:
+  roles:
+    - storage

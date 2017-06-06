@@ -1,0 +1,30 @@
+#
+# Default  Bacula File Daemon Configuration file
+#
+#  For Bacula release 8.8.3 (19 May 2017) -- redhat 
+#
+# There is not much to change here except perhaps the
+# File daemon Name to
+#
+#
+# Copyright (C) 2000-2017 Kern Sibbald
+# License: BSD 2-Clause; see file LICENSE-FOSS
+#
+
+Director {
+  Name = {{ dir_name }}
+  Password = {{ client_password }}
+
+FileDaemon {
+  Name = {{ client_name }}-fd
+  FDport = 9102
+  WorkingDirectory = /opt/bacula/working
+  Pid Directory = /opt/bacula/working
+  Maximum Concurrent Jobs = 20
+  Plugin Directory = /opt/bacula/plugins
+}
+
+Messages {
+  Name = Standard
+  director = {{ dir_name }} = all, !skipped, !restored, !saved
+}

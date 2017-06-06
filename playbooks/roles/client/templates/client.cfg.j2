@@ -1,0 +1,49 @@
+# {{ client_name }} client configuration
+
+Client {
+  Name = {{ client_name }}-fd
+  Address = {{ client_ip }}
+  AutoPrune = yes
+  Catalog = "MyCatalog"
+  FileRetention = 2592000
+  JobRetention = 2592000
+  MaximumConcurrentJobs = 5
+  Password = "{{ client_password }}"
+}
+
+Fileset {
+  Name = "{{ client_name }}-set"
+  Include {
+   Options {
+    Compression = Gzip9
+    Dedup = BothSides
+    Signature = Md5
+   }
+
+  }
+  Include {
+   Options {
+    Compression = Gzip9
+    Dedup = None
+    Signature = Md5
+   }
+   File = "/U01/"
+  }
+  Exclude {
+   File = "/U01/Logs"
+  }
+}
+
+Job {
+  Name = backup-{{ client_name }}
+  Client = {{ client_name }}-fd
+  Enabled = no
+  Fileset = "{{ client_name }}-set"
+  JobDefs = "DefaultJob"
+  MaximumConcurrentJobs = 10
+  Messages = "Standard"
+  Pool = "S3 Cloud Pool - India"
+  Schedule = "Daily Increment Saturday Full"
+  Storage = "S3-Cloud-Storage-India"
+  WriteBootstrap = "/opt/bacula/working/%c_%n.bsr"
+}

@@ -1,0 +1,33 @@
+Storage {
+  Name = {{ sd_name }}
+  SDAddress = {{ sd_address }}
+  SDPort = 9103
+  MaximumConcurrentJobs = 20
+  PidDirectory = "/opt/bacula/working"
+  PluginDirectory = "/opt/bacula/plugins"
+  WorkingDirectory = "/opt/bacula/working"
+}
+
+Messages {
+  Name = "Standard"
+  Director  = {{ dir_name }} = All,!Debug,!Saved
+}
+
+Director {
+  Name = {{ dir_name }}
+  Password = "{{ sd_password }}"
+}
+
+Device {
+  Name = {{ sd_name }}-storage
+  AlwaysOpen = no
+  ArchiveDevice = "/backup"
+  AutomaticMount = yes
+  DeviceType = {{ sd_name }}-File
+  LabelMedia = yes
+  MaximumConcurrentJobs = 5
+  MaximumFileSize = 1073741824
+  MediaType = File
+  RandomAccess = no
+  RemovableMedia = yes
+}

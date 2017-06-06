@@ -1,0 +1,26 @@
+---
+- name: add bacula repo file
+  template: src=bacula.repo.j2 dest=/etc/yum.repos.d/bacula.repo
+  tags: bacula-fd
+
+- name: install bacula-fd
+  yum: name=bacula-enterprise-client state=present
+  tags: bacula-fd
+
+- name: configure bacula-fd
+  template: src=bacula-fd.conf.j2 dest=/opt/bacula/etc/bacula-fd.conf
+  tags: bacula-fd
+
+- name: run bacula-fd
+  service: name=bacula-fd state=started enabled=yes
+  tags: bacula-fd
+
+- service: name=bacula-fd state=stopped
+
+- template: src=client.cfg.j2 dest=/opt/bacula/etc/conf.d/Director/bacula-dir/Client/{{ client_name }}-client.cfg
+  delegate_to: "{{ groups['director'][0] }}"
+
+- service: state=restarted name=bacula-director
+  delegate_to: "{{ groups['director'][0] }}"
+
+- service: name=bacula-fd state=started
