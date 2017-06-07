@@ -6,5 +6,7 @@
     client_ip: {{ ansible_default_ipv4.address }}
     client_name: {{ ansible_hostname }}
     client_password:
+    include_dir:
+    exclude_dir:
   roles:
     - client

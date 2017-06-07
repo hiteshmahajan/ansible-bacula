@@ -1,0 +1,39 @@
+---
+- name: Install PostgreSQL
+  become: yes
+  yum:
+    name: "postgresql-server"
+    state: present
+  tags:
+    - postgresql
+
+- service:
+    name: postgresql
+    state: initdb
+
+- name: add bacula repo file
+  template: src=bacula.repo.j2 dest=/etc/yum.repos.d/bacula.repo
+  tags: bacula-dir
+
+- name: install bacula-dir
+  yum: name=bacula-enterprise-postgresql state=present
+  tags: bacula-dir
+
+- name: Enable services for automatic start
+  service:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - postgresql
+    - bacula-dir
+
+- service: name=postgresql state=started enabled=yes
+
+- name: db init
+  sudo_user: postgres
+  command: /opt/bacula/scripts/create_postgresql_database
+  command: /opt/bacula/scripts/make_postgresql_tables
+  command: /opt/bacula/scripts/grant_postgresql_privileges
+  command: exit
+
+  command: /opt/bacula/scripts/bacula start

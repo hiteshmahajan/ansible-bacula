@@ -6,3 +6,12 @@
 
 [bacula-client]
 
+
+[director:children]
+bacula-director
+
+[storage:children]
+bacula-storage
+
+[client:children]
+bacula-client

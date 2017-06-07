@@ -24,17 +24,7 @@
     name: "{{ item }}"
     enabled: yes
   with_items:
-    - postgresql
     - bacula-sd
-
-- service: name=postgresql state=started enabled=yes
-
-- name: db init
-  sudo_user: postgres
-  command: /opt/bacula/scripts/create_postgresql_database
-  command: /opt/bacula/scripts/make_postgresql_tables
-  command: /opt/bacula/scripts/grant_postgresql_privileges
-  command : exit
 
 - service: name=bacula-sd state=stopped
 

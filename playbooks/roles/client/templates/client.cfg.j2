@@ -18,20 +18,20 @@ Fileset {
     Compression = Gzip9
     Dedup = BothSides
     Signature = Md5
+    Exclude = yes
    }
 
-  }
-  Include {
-   Options {
-    Compression = Gzip9
-    Dedup = None
-    Signature = Md5
-   }
-   File = "/U01/"
-  }
+  {% for item in client_include_dirs %}
+    File = {{ item }}
+    {% endfor %}
+    }
+  {% if client_exclude_dirs %}
   Exclude {
-   File = "/U01/Logs"
+    {% for item in client_exclude_dirs %}
+    File = {{ item }}
+    {% endfor %}
   }
+  {% endif %}
 }
 
 Job {
